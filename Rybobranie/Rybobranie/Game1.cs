@@ -89,14 +89,18 @@ namespace Rybobranie
             if (stanKlawiatury.IsKeyDown(Keys.S)) translacja.Z = -0.5f;
             if (stanKlawiatury.IsKeyDown(Keys.A)) translacja.X = 0.5f;
             if (stanKlawiatury.IsKeyDown(Keys.D)) translacja.X = -0.5f;
-
-            MouseState nowyStanMyszy = Mouse.GetState();
+            if (stanKlawiatury.IsKeyDown(Keys.NumPad8)) myszkaY = 0.03f;
+            if (stanKlawiatury.IsKeyDown(Keys.NumPad2)) myszkaY = -0.03f;
+            if (stanKlawiatury.IsKeyDown(Keys.NumPad4)) myszkaX = 0.03f;
+            if (stanKlawiatury.IsKeyDown(Keys.NumPad6)) myszkaX = -0.03f;
+            /*MouseState nowyStanMyszy = Mouse.GetState();
             if(nowyStanMyszy.LeftButton == ButtonState.Pressed)
             {
                 myszkaX = (staryStanMyszy.X - nowyStanMyszy.X) / 500.0f;
                 myszkaY = (staryStanMyszy.Y - nowyStanMyszy.Y) / 500.0f;
             }
-                
+            */    
+
             view *= Matrix.CreateFromYawPitchRoll(myszkaX, myszkaY, 0);
             view *= Matrix.CreateTranslation(translacja);
 
