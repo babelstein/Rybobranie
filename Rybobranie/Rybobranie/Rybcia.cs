@@ -19,7 +19,6 @@ namespace Rybobranie
         private Vector3 przemiesz;
         private Vector3 cel;
         private Vector3 docelu;
-        private double docelulenght;
 
         private float x;
         private float y;
@@ -32,11 +31,9 @@ namespace Rybobranie
         private int stan; 
         /*
         * 0 - nie robie nic
-        * 1 - plyne bez celu
-        * 2 - plyne do celu
-        * 3 - uciekam 
-        * 4 - mam na celu zarcie
-        * 5 - nie mam na celu zarcia
+        * 1 - plyne do celu
+        * 2 - uciekam
+        * > 2 - szukam jedzenia
         */
 
         public Rybcia()
@@ -57,6 +54,16 @@ namespace Rybobranie
             return this.stan;
         }
 
+        public void setStan(int stan)
+        {
+            this.stan = stan;
+        }
+
+        public int getEnergia()
+        {
+            return this.energia;
+        }
+
         public Matrix getMatrix()
         {
             return world;
@@ -67,21 +74,28 @@ namespace Rybobranie
             return polozenie;
         }
 
-        public void UstawCel(Vector3 cel,int stan)
+        public int UstawCel(Vector3 cel,int stan) // ustawia cel podany w argumencie funkcji a następnie wylicza współczynnik przemieszczenia
         {
+            if (cel == Vector3.Zero)
+                return 1;
             this.cel = cel;
             docelu = cel - polozenie;
             przemiesz = docelu ;
             przemiesz.Normalize();
             przemiesz *= szybkosc;
             this.stan = stan;
+            return 0;
         }
 
-        public void Plyn()
+
+        public void CzyUciekac(Vector3 rekin)
+        //Decydujemy się czy uciekać czy nie.
         {
-            if (this.stan == 4) stan = 1;
-            if (this.stan == 5) stan = 2;
-            docelulenght = docelu.Length();
+
+        }
+
+        public void Plyn() // w zakleżności od stanu nasza rybka będzie płynąć...
+        {
             if (docelu.Length() > 2.5)
             {
                 polozenie += przemiesz;
@@ -92,11 +106,11 @@ namespace Rybobranie
             }
             else
             {
-                cel = Vector3.Zero;
-                docelu = cel;
-                przemiesz = docelu;
-                energia += 500;
-                stan = 0;
+                /* Tutaj trzeba otrzymać wartość energi jedzenia
+                 * zmienić stan rybki
+                 * wyzerować wektor celu
+                 * wyzerować wektor docelu
+                 */
             }
         }
     }
