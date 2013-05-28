@@ -74,7 +74,8 @@ namespace Rybobranie
             return los;
         }
 
-        Vector3 getJedzenie(Vector3 rybka)  //Zwrócenie polozenia jedzenia i sprawdzenie czy jest odpowiednio blisko danej rybki.
+        Vector3 getJedzenie(Vector3 rybka)  
+        //Zwrócenie polozenia jedzenia i sprawdzenie czy jest odpowiednio blisko danej rybki.
         {
             Vector3 nowyCel;
             Vector3 czyok;
@@ -95,6 +96,16 @@ namespace Rybobranie
             return nowyCel;
         }
 
+        bool CzyCelAktywny(Vector3 cel)
+        {
+            foreach (Jedzenie jedzenie in ListaJedzenia)
+            {
+                if (jedzenie.getPolozenie() == cel)
+                    return true;
+            }
+            return false;
+        }
+
         public void PodejmijDecyzje()
         //metoda wywo³uj¹ca zagnie¿d¿one w klasie metody decyduj¹ce o tym jak¹ decyzje podejmie rybka
         {
@@ -102,7 +113,7 @@ namespace Rybobranie
             {
                 if (Nemo.getEnergia() > 0)
                 {
-                    if (Nemo.getStan() == 0)
+                    if (Nemo.getStan() == 0) //rybka nie robi nic
                     {
                         if (Nemo.UstawCel(getJedzenie(Nemo.getPolozenie()), 1) == 1)
                             Nemo.UstawCel(LosujPunkt(), 450);
@@ -112,16 +123,21 @@ namespace Rybobranie
                             Nemo.Plyn(); //teraz tylko tak testowo to wpisa³em...
                             //Sprawdzamy czy mo¿na uciekaæ
                     }
-                    if (Nemo.getStan() == 1 || Nemo.getStan()==2)
+                    if (Nemo.getStan() == 1 || Nemo.getStan()==2) //rybka plynie do celu lub ucieka
                     {
-                        //DODAJ SPRAWDZANIE TEGO CZY MA JESZCZE PO CO P£YN¥Æ !!
-                        if (!plynierekin)
+                        if (!plynierekin && CzyCelAktywny(Nemo.getCel()))
                             Nemo.Plyn();
-                        else
+                        else if(plynierekin)
+                        {    
                             Nemo.Plyn(); //teraz tylko tak testowo to wpisa³em...
-                        //Sprawdzamy czy mo¿na uciekaæ
+                            //Sprawdzamy czy mo¿na uciekaæ
+                        }
+                        else if(!CzyCelAktywny(Nemo.getCel()))
+                        {
+                            Nemo.setStan(0);
+                        }
                     }
-                    if (Nemo.getStan() >= 3)
+                    if (Nemo.getStan() >= 3) // rybka szuka jedzenia
                     {
                         if (Nemo.getStan() == 3)
                         {
@@ -242,7 +258,7 @@ namespace Rybobranie
                     DrawModel(ModelRyby, rybcia.getMatrix(), Camera.getView(), Camera.getProjection());
                 }
             }
-            DrawText(czcionkaGry, "trolololo", new Vector2(10, 10), Color.Gold);
+            //DrawText(czcionkaGry, "trolololo", new Vector2(10, 10), Color.Gold);
             base.Draw(gameTime);
         }
 

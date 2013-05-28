@@ -74,6 +74,11 @@ namespace Rybobranie
             return polozenie;
         }
 
+        public Vector3 getCel()
+        {
+            return cel;
+        }
+
         public int UstawCel(Vector3 cel,int stan) // ustawia cel podany w argumencie funkcji a następnie wylicza współczynnik przemieszczenia
         {
             if (cel == Vector3.Zero)
